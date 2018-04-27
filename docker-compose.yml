@@ -1,0 +1,24 @@
+version: '2'
+services:
+  get:
+    image: golang:1.10
+    container_name: go_get
+    volumes:
+      - .:/go
+    command: ["go", "get", "-d", "./..."]
+  build:
+    image: golang:1.10
+    container_name: go_build
+    volumes:
+      - .:/go
+    depends_on: 
+      - get
+    command: ["go", "build", "-o", "app"]
+  app:
+    image: debian:stretch-slim
+    container_name: go_app
+    volumes:
+      - .:/go
+    depends_on:
+      - build
+    command: ["/go/app"]
