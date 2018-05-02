@@ -13,9 +13,12 @@ services:
       - .:/go
     depends_on: 
       - get
-    command: ["go", "build", "-o", "app"]
+    environment:
+      - CGO_ENABLED=0
+      - GOOS=linux
+    command: ["go", "build", "-a", "-ldflags", "-extldflags \"-static\"", "-o", "app"]
   app:
-    image: debian:stretch-slim
+    image: alpine:3.7
     container_name: go_app
     volumes:
       - .:/go
